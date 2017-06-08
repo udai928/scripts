@@ -20,20 +20,19 @@ def main():
 
 
 def summary():
-
     request_sum = 0
     record_count = 0
     try:
         connection = getConnection()
-        for record in get_all_record(SQL_GET_ALL_RECORDS, connection):
+        for record in get_all_record(SQL_GE_ALL_RECORDS, connection):
             request_sum += record[0]
-            print(request_sum)
             record_count += 1
             insert_request_sum_with_connection(record_count, request_sum, connection)
     except:
         print("[SQL:!!!FAILED!!!]" + SQL_INSERT_SUM)
         sys.exit(1)
     finally:
+        connection.commit()
         connection.close()
 
 
@@ -48,8 +47,6 @@ def insert_request_sum_with_connection(record, sum, my_connection):
     except:
         print("[SQL:!!!FAILED!!!]" + SQL_INSERT_SUM)
         sys.exit(1)
-    finally:
-        my_connection.commit()
 
 
 def execute_select_with_connection(sql_select, my_connection):
